@@ -1,7 +1,9 @@
 package com.example.Course.Registration.controllers;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.example.Course.Registration.payload.response.AbstractResponseFactory;
 import com.example.Course.Registration.payload.response.JwtResponseFactory;
@@ -15,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -43,7 +46,7 @@ public class AuthController {
 
 	RoleRepository roleRepository;
 
-	PasswordEncoder encoder;
+	// PasswordEncoder encoder;
 
 	JwtUtils jwtUtils;
 
@@ -57,20 +60,45 @@ public class AuthController {
 		this.authenticationManager = authenticationManager;
 		this.userRepository = userRepository;
 		this.roleRepository = roleRepository;
-		this.encoder = encoder;
+		// this.encoder = encoder;
 		this.jwtUtils = jwtUtils;
 	}
 
 	@PostMapping("/signin")
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
-		Authentication authentication = authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-		System.out.println("Authentication :" + authentication);
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-		String jwt = jwtUtils.generateJwtToken(authentication);
+		// Authentication authentication = authenticationManager.authenticate(
+		// new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),
+		// loginRequest.getPassword()));
 
-		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+		Optional<User> user = userRepository.findByEmail(loginRequest.getUsername());
+
+		if (user == null) {
+			return ResponseEntity.badRequest().body(MessageResponseFactory.getResponse("Invalid username or password"));
+		}
+
+		if (!user.get().getPassword().equals(loginRequest.getPassword())) {
+			return ResponseEntity.badRequest().body(MessageResponseFactory.getResponse("Invalid username or password"));
+		}
+
+		// System.out.println("Authentication :" + authentication);
+		// SecurityContextHolder.getContext().setAuthentication(authentication);
+		// String jwt = jwtUtils.generateJwtToken(authentication);
+
+		// UserDetailsImpl userDetails = (UserDetailsImpl)
+		// authentication.getPrincipal();
+
+		UserDetailsImpl userDetails = new UserDetailsImpl(
+				user.get().getId(),
+				user.get().getEmail(),
+				user.get().getPassword(),
+				user.get().getRoles().stream()
+						.map(role -> new SimpleGrantedAuthority(role.getName().name()))
+						.collect(Collectors.toList()),
+				user.get().getName());
+
+		// Generate JWT token without using authentication
+		String jwt = jwtUtils.generateJwtToken(userDetails);
 
 		return ResponseEntity.ok(JwtResponseFactory.getResponse(jwt + "," + userDetails.toString()));
 	}
@@ -93,7 +121,7 @@ public class AuthController {
 		// Create new user's account
 		User user = new User(signUpRequest.getName(),
 				signUpRequest.getEmail(),
-				encoder.encode(signUpRequest.getPassword()),
+				signUpRequest.getPassword(),
 				signUpRequest.getBranch(),
 				signUpRequest.getDegree());
 
