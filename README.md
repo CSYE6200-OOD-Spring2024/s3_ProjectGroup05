@@ -1,35 +1,35 @@
 # JavaProject - Group 03
 
-## Functionalities
+## Features
 
-1. Sign in with existing credentials.
-2. Sign up with a new account.
-3. Use JWT tokens for secure and authenticated access.
-4. Browse and search for available courses.
-5. Access detailed information about each course, including description, schedule, instructor, and available seats.
-6. Add courses to the user's schedule.
-7. Drop courses if needed.
+1. Log in using existing credentials.
+2. Register a new account.
+3. Secure access using JWT tokens.
+4. Browse and search available courses.
+5. View detailed course information such as description, schedule, instructor, and seat availability.
+6. Add courses to your schedule.
+7. Drop enrolled courses as needed.
 
-## Tech stack
+## Technology Stack
 
 1. JAVA
 2. SPRING BOOT
 3. JAVA SCRIPT
 4. CSS
 5. HTML
-6. MONGODB(DATABASE)
+6. MONGODB (DATABASE)
 7. REACT
 8. VITE
 
-## Future enhancements
+## Future Enhancements
 
-1. Allow students to drop courses within specified deadlines without academic penalties and provide administrators with tools to handle cancellations.
-2. Notify students about important registration dates, upcoming course openings, waitlist status changes, and other relevant information.
-3. Assist students in planning their academic schedule by providing tools to search for courses, check schedule conflicts, and optimize their class timetable.
-4. Generate reports on course enrollment trends, student demographics, and other key metrics to aid in academic planning and resource allocation.
+1. Enable students to drop courses within deadlines without penalties, with administrative tools for managing cancellations.
+2. Provide notifications to students regarding important registration dates, course openings, waitlist status changes, and other relevant updates.
+3. Assist students in scheduling their academic courses through tools for course searching, schedule conflict checking, and timetable optimization.
+4. Generate reports on course enrollment trends, student demographics, and other metrics for academic planning and resource allocation.
 
 ## HOW TO RUN
 
-1. For the frontend use npm i and then npm run dev
-2. For the backend run the CourseRegistrationMain.java
-3. Keep both of them running in different terminals
+1. Install dependencies for the frontend using npm i, then start with npm run dev.
+2. Run CourseRegistrationMain.java for the backend.
+3. Keep both frontend and backend running in separate terminals.
