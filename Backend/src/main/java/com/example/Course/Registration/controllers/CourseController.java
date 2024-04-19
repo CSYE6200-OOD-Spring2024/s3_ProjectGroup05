@@ -255,16 +255,17 @@ public class CourseController {
                 return ResponseEntity.badRequest()
                         .body(MessageResponseFactory.getResponse("Error: Course " + course.getCRN() + " has no seats"));
             }
-            try {
-                SimpleDateFormat inputFormat = new SimpleDateFormat("hh:mm a");
-                Date startTime = inputFormat.parse(course.getClassTiming().getStartTime());
-                course.getClassTiming().setStartTime(startTime.toString());
-                Date endTime = inputFormat.parse(course.getClassTiming().getEndTime());
-                course.getClassTiming().setEndTime(endTime.toString());
-            } catch (ParseException e) {
-                return ResponseEntity.badRequest()
-                        .body(MessageResponseFactory.getResponse("Error: Invalid time format"));
-            }
+            // try {
+            // SimpleDateFormat inputFormat = new SimpleDateFormat("hh:mm a");
+            // Date startTime = inputFormat.parse(course.getClassTiming().getStartTime());
+            // String startTime =
+            // course.getClassTiming().setStartTime(startTime.toString());
+            // Date endTime = inputFormat.parse(course.getClassTiming().getEndTime());
+            // course.getClassTiming().setEndTime(endTime.toString());
+            // } catch (ParseException e) {
+            // return ResponseEntity.badRequest()
+            // .body(MessageResponseFactory.getResponse("Error: Invalid time format"));
+            // }
             courseService.addCourse(course);
         }
         return ResponseEntity.ok().body(MessageResponseFactory.getResponse("Course added successfully"));
